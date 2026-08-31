@@ -1,372 +1,870 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Glass Tic Tac Toe</title>
-    <style>
-        /* Unique Animated Gradient Background */
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(-45deg, #1a2a6c, #b21f1f, #fdbb2d, #203a43, #0f2027);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: white;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        h1 {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            margin-bottom: 5px;
-        }
-
-        /* Mode Selection Buttons */
-        .mode-selection {
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .mode-btn {
-            padding: 8px 15px;
-            font-size: 1rem;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .mode-btn.active {
-            background: rgba(255, 255, 255, 0.4);
-            color: white;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            font-weight: bold;
-            border-color: white;
-        }
-
-        .status {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-            height: 30px; /* keeps layout stable when text changes */
-        }
-
-        /* Glassmorphism Board */
-        .board {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-
-        .cell {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-        }
-
-        .cell:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        /* Hint Animation */
-        .cell.hint-glow {
-            animation: pulseHint 1s infinite alternate;
-            background: rgba(255, 215, 0, 0.5);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-        }
-
-        @keyframes pulseHint {
-            from { transform: scale(1); }
-            to { transform: scale(1.08); }
-        }
-
-        /* Bottom Controls */
-        .controls {
-            margin-top: 30px;
-            display: flex;
-            gap: 15px;
-        }
-
-        button.action-btn {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(5px);
-        }
-
-        button.action-btn:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        
-        button.action-btn:active {
-            transform: translateY(0);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capacity Connect — Learn. Develop. Share.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --ink: #101B33;
+    --ink-soft: #5B6478;
+    --ink-faint: #8992A3;
+    --accent: #E3A857;
+    --accent-deep: #C4842B;
+    --teal: #2F6F6D;
+    --clay: #B5654A;
+    --slate: #4C5C8C;
+    --line: #DEE4EC;
+    --success: #3E8E5A;
+    --radius-s: 6px;
+    --radius-m: 12px;
+    --radius-l: 20px;
+    --font-display: "Fraunces", serif;
+    --font-body: "IBM Plex Sans", sans-serif;
+  }
+ 
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:15px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:var(--font-display);
+    font-weight:600;
+    margin:0;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  p{ margin:0; }
+  ul{ list-style:none; margin:0; padding:0; }
+  button{ font-family:inherit; cursor:pointer; }
+  a{ color:inherit; text-decoration:none; }
+  :focus-visible{ outline:2px solid var(--slate); outline-offset:2px; }
+ 
+  /* ---------- Layout ---------- */
+  .app{
+    display:grid;
+    grid-template-columns:248px 1fr;
+    min-height:100vh;
+  }
+ 
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    background:var(--ink);
+    color:#EAECF3;
+    padding:28px 18px;
+    display:flex;
+    flex-direction:column;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:0 6px 26px 6px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    margin-bottom:22px;
+  }
+  .brand-mark{ flex-shrink:0; }
+  .brand-name{
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:600;
+    color:#fff;
+    line-height:1.15;
+  }
+  .brand-tag{
+    font-size:11px;
+    color:#9AA3BD;
+    margin-top:2px;
+  }
+ 
+  .nav-group{ flex:1; }
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 12px;
+    border-radius:var(--radius-s);
+    color:#C4CAE0;
+    font-size:14px;
+    font-weight:500;
+    margin-bottom:2px;
+    background:transparent;
+    border:none;
+    width:100%;
+    text-align:left;
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-item svg{ flex-shrink:0; opacity:.85; }
+  .nav-item:hover{ background:rgba(255,255,255,0.06); color:#fff; }
+  .nav-item.active{
+    background:var(--accent);
+    color:var(--ink);
+    font-weight:600;
+  }
+  .nav-item.active svg{ opacity:1; }
+ 
+  .sidebar-footer{
+    border-top:1px solid rgba(255,255,255,0.08);
+    padding-top:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .avatar-sm{
+    width:34px; height:34px; border-radius:50%;
+    background:var(--accent);
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:13px;
+    flex-shrink:0;
+  }
+  .sidebar-footer .who{ font-size:13px; color:#fff; font-weight:600; }
+  .sidebar-footer .role{ font-size:11.5px; color:#9AA3BD; }
+ 
+  /* ---------- Main ---------- */
+  .main{ padding:32px 40px 60px; max-width:1080px; }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:30px;
+  }
+  .topbar .eyebrow{ font-size:12.5px; color:var(--ink-faint); margin-bottom:6px; }
+  .topbar h1{ font-size:26px; }
+  .topbar .streak{
+    font-size:13px;
+    color:var(--ink-soft);
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:8px 14px;
+    border-radius:999px;
+  }
+ 
+  .view{ display:none; }
+  .view.active{ display:block; }
+ 
+  /* ---------- Cards / surfaces ---------- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-m);
+  }
+ 
+  /* ---------- Home ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:28px;
+    align-items:center;
+    padding:36px;
+    margin-bottom:34px;
+    background:linear-gradient(135deg, #101B33 0%, #1B2A4D 100%);
+    border-radius:var(--radius-l);
+    color:#fff;
+    overflow:hidden;
+    position:relative;
+  }
+  .hero-copy .eyebrow{ color:var(--accent); font-size:12.5px; margin-bottom:10px; font-weight:600; }
+  .hero-copy h2{
+    font-size:32px;
+    color:#fff;
+    line-height:1.15;
+    margin-bottom:14px;
+  }
+  .hero-copy p{
+    color:#C4CAE0;
+    font-size:14.5px;
+    max-width:38ch;
+    margin-bottom:22px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 22px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:14px;
+    border:none;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-primary{ background:var(--accent); color:var(--ink); }
+  .btn-primary:hover{ box-shadow:0 8px 20px -8px rgba(227,168,87,.7); }
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--ink);
+  }
+  .btn-ghost:hover{ border-color:var(--ink-soft); }
+  .btn-sm{ padding:8px 16px; font-size:13px; }
+ 
+  .hero-dial{ display:flex; justify-content:center; }
+  .dial-wrap{ position:relative; width:180px; height:180px; }
+  .dial-wrap svg{ transform:rotate(-90deg); }
+  .dial-center{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .dial-center .num{ font-family:var(--font-display); font-size:34px; font-weight:700; color:#fff; }
+  .dial-center .lbl{ font-size:11.5px; color:#9AA3BD; letter-spacing:.02em; margin-top:2px; }
+ 
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:16px;
+  }
+  .section-head h3{ font-size:19px; }
+  .section-head .link{ font-size:13px; color:var(--slate); font-weight:600; }
+ 
+  .course-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:36px;
+  }
+  .course-card{
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    border-left:4px solid var(--accent);
+  }
+  .course-card[data-accent="teal"]{ border-left-color:var(--teal); }
+  .course-card[data-accent="clay"]{ border-left-color:var(--clay); }
+  .course-card[data-accent="slate"]{ border-left-color:var(--slate); }
+  .course-card[data-accent="amber"]{ border-left-color:var(--accent); }
+  .course-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .course-icon{
+    width:38px; height:38px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bg);
+    flex-shrink:0;
+  }
+  .course-card h4{ font-size:16px; margin-bottom:3px; }
+  .course-meta{ font-size:12.5px; color:var(--ink-faint); }
+  .course-desc{ font-size:13.5px; color:var(--ink-soft); }
+  .course-bottom{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
+  .progress-track{
+    height:6px; border-radius:99px; background:var(--bg);
+    flex:1; margin-right:14px; overflow:hidden;
+  }
+  .progress-fill{ height:100%; border-radius:99px; background:var(--accent); }
+  .progress-pct{ font-size:12.5px; color:var(--ink-soft); font-weight:600; min-width:32px; }
+ 
+  /* ---------- Progress view ---------- */
+  .stat-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:28px; }
+  .stat-card{ padding:20px; }
+  .stat-card .num{ font-family:var(--font-display); font-size:30px; font-weight:600; }
+  .stat-card .lbl{ font-size:13px; color:var(--ink-soft); margin-top:4px; }
+ 
+  .ring-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:10px; }
+  .ring-card{ padding:22px 14px; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
+  .ring-card h4{ font-size:14px; }
+  .ring-svg{ transform:rotate(-90deg); }
+ 
+  /* ---------- Assessment ---------- */
+  .quiz-shell{ max-width:640px; }
+  .quiz-progress{ font-size:12.5px; color:var(--ink-faint); margin-bottom:8px; }
+  .quiz-card{ padding:30px; }
+  .quiz-q{ font-size:18px; margin-bottom:20px; line-height:1.4; }
+  .quiz-options{ display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+  .quiz-option{
+    padding:13px 16px;
+    border:1px solid var(--line);
+    border-radius:var(--radius-s);
+    background:var(--surface);
+    text-align:left;
+    font-size:14px;
+    color:var(--ink);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .quiz-option:hover{ border-color:var(--slate); }
+  .quiz-option.selected{ border-color:var(--slate); background:#EEF1FA; font-weight:600; }
+  .quiz-nav{ display:flex; justify-content:flex-end; }
+ 
+  .result-card{ padding:36px; text-align:center; }
+  .result-card .big{ font-family:var(--font-display); font-size:46px; font-weight:700; margin:14px 0 6px; }
+  .result-card .verdict{ font-size:15px; color:var(--ink-soft); margin-bottom:24px; }
+ 
+  /* ---------- Certificates ---------- */
+  .cert-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+  .cert-card{ padding:0; overflow:hidden; }
+  .cert-face{
+    padding:26px 24px 20px;
+    background:
+      repeating-linear-gradient(135deg, rgba(227,168,87,.06) 0 12px, transparent 12px 24px),
+      var(--ink);
+    color:#fff;
+    position:relative;
+  }
+  .cert-face .cert-eyebrow{ font-size:11px; color:var(--accent); font-weight:600; margin-bottom:10px; }
+  .cert-face h4{ color:#fff; font-size:19px; margin-bottom:4px; }
+  .cert-face .cert-name{ font-size:13px; color:#C4CAE0; }
+  .cert-foot{ padding:16px 24px; display:flex; justify-content:space-between; align-items:center; }
+  .cert-date{ font-size:12.5px; color:var(--ink-faint); }
+  .cert-locked{ padding:26px 24px; color:var(--ink-faint); font-size:13.5px; display:flex; flex-direction:column; gap:10px; }
+ 
+  /* ---------- Profile ---------- */
+  .profile-grid{ display:grid; grid-template-columns:220px 1fr; gap:26px; }
+  .profile-card{ padding:26px 22px; text-align:center; }
+  .avatar-lg{
+    width:78px; height:78px; border-radius:50%;
+    background:var(--accent); color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:28px; font-weight:700;
+    margin:0 auto 14px;
+  }
+  .profile-card h3{ font-size:18px; }
+  .profile-card .role{ font-size:13px; color:var(--ink-soft); margin-top:3px; margin-bottom:18px; }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+  .tag{
+    font-size:12px; padding:6px 12px; border-radius:999px;
+    background:var(--bg); color:var(--ink-soft); border:1px solid var(--line);
+  }
+  .history-card{ padding:24px; }
+  .history-item{
+    display:flex; gap:14px; padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .history-item:last-child{ border-bottom:none; padding-bottom:0; }
+  .history-dot{
+    width:9px; height:9px; border-radius:50%; background:var(--accent);
+    margin-top:6px; flex-shrink:0;
+  }
+  .history-item .h-title{ font-size:14px; font-weight:600; }
+  .history-item .h-date{ font-size:12.5px; color:var(--ink-faint); margin-top:2px; }
+ 
+  /* ---------- Mobile nav ---------- */
+  .mobile-topbar{ display:none; }
+ 
+  @media (max-width: 860px){
+    .app{ grid-template-columns:1fr; }
+    .sidebar{
+      position:fixed; bottom:0; left:0; right:0; top:auto;
+      height:auto; width:100%;
+      flex-direction:row;
+      padding:10px 8px;
+      z-index:30;
+      overflow-x:auto;
+    }
+    .brand, .sidebar-footer{ display:none; }
+    .nav-group{ display:flex; width:100%; gap:4px; }
+    .nav-item{ flex-direction:column; gap:4px; font-size:10.5px; padding:8px 4px; text-align:center; flex:1; }
+    .main{ padding:20px 18px 100px; }
+    .hero{ grid-template-columns:1fr; text-align:center; padding:26px; }
+    .hero-copy p{ margin-left:auto; margin-right:auto; }
+    .course-grid, .stat-row, .ring-grid, .cert-grid{ grid-template-columns:1fr 1fr; }
+    .ring-grid{ grid-template-columns:1fr 1fr; }
+    .profile-grid{ grid-template-columns:1fr; }
+    .mobile-topbar{
+      display:flex; align-items:center; gap:10px;
+      padding:14px 18px; background:var(--ink); color:#fff; position:sticky; top:0; z-index:20;
+    }
+    .mobile-topbar .brand-name{ font-size:15px; }
+  }
+  @media (max-width: 520px){
+    .course-grid, .stat-row, .ring-grid, .cert-grid{ grid-template-columns:1fr; }
+  }
+ 
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+</style>
 </head>
 <body>
-
-    <h1>Neon Glass Tic Tac Toe</h1>
-    
-    <div class="mode-selection">
-        <button id="modePvP" class="mode-btn active">👥 2 Player</button>
-        <button id="modePvC" class="mode-btn">🤖 vs Computer</button>
+ 
+<div class="mobile-topbar">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#E3A857" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#E3A857" stroke-width="2" stroke-linecap="round"/></svg>
+  <span class="brand-name">Capacity Connect</span>
+</div>
+ 
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#E3A857" stroke-width="1.6"/><path d="M12 6.5v5.7l4 2.3" stroke="#E3A857" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Capacity Connect</div>
+        <div class="brand-tag">Learn · Develop · Share</div>
+      </div>
     </div>
-
-    <div class="status" id="status">Player X's Turn</div>
-
-    <div class="board" id="board">
-        <div class="cell" data-index="0"></div>
-        <div class="cell" data-index="1"></div>
-        <div class="cell" data-index="2"></div>
-        <div class="cell" data-index="3"></div>
-        <div class="cell" data-index="4"></div>
-        <div class="cell" data-index="5"></div>
-        <div class="cell" data-index="6"></div>
-        <div class="cell" data-index="7"></div>
-        <div class="cell" data-index="8"></div>
+ 
+    <ul class="nav-group" id="navList">
+      <li><button class="nav-item active" data-view="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 11.5 12 4l8 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9h12v-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button></li>
+      <li><button class="nav-item" data-view="courses"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 5.5h9a3 3 0 0 1 3 3V19a2.5 2.5 0 0 0-2.5-2.5H4V5.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 5.5h-4a3 3 0 0 0-3 3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Courses</span></button></li>
+      <li><button class="nav-item" data-view="progress"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 19V10M12 19V5M19 19v-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>My Progress</span></button></li>
+      <li><button class="nav-item" data-view="assessment"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 4.5h12v15H6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9h6M9 13h6M9 17h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Assessment</span></button></li>
+      <li><button class="nav-item" data-view="certificates"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="5" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 13-1.6 7 5.1-2.6 5.1 2.6-1.6-7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Certificates</span></button></li>
+      <li><button class="nav-item" data-view="profile"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M5 19c1.2-3.5 4-5 7-5s5.8 1.5 7 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Profile</span></button></li>
+    </ul>
+ 
+    <div class="sidebar-footer">
+      <div class="avatar-sm">SB</div>
+      <div>
+        <div class="who">Shubham</div>
+        <div class="role">Learner</div>
+      </div>
     </div>
-
-    <div class="controls">
-        <button id="hintBtn" class="action-btn">💡 Get a Hint</button>
-        <button id="restartBtn" class="action-btn">🔄 Restart Game</button>
-    </div>
-
-    <script>
-        const cells = document.querySelectorAll('.cell');
-        const statusText = document.getElementById('status');
-        const restartBtn = document.getElementById('restartBtn');
-        const hintBtn = document.getElementById('hintBtn');
-        const modePvPBtn = document.getElementById('modePvP');
-        const modePvCBtn = document.getElementById('modePvC');
-        
-        const winConditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-            [0, 4, 8], [2, 4, 6]             // Diagonals
-        ];
-
-        let options = ["", "", "", "", "", "", "", "", ""];
-        let currentPlayer = "X";
-        let running = false;
-        let gameMode = "pvp"; // "pvp" (Player vs Player) or "pvc" (Player vs Computer)
-        let isComputerThinking = false;
-
-        initializeGame();
-
-        function initializeGame() {
-            cells.forEach(cell => cell.addEventListener('click', cellClicked));
-            restartBtn.addEventListener('click', restartGame);
-            hintBtn.addEventListener('click', giveHint);
-            
-            // Mode Selectors
-            modePvPBtn.addEventListener('click', () => setMode('pvp'));
-            modePvCBtn.addEventListener('click', () => setMode('pvc'));
-
-            statusText.textContent = `Player ${currentPlayer}'s Turn`;
-            running = true;
-        }
-
-        function setMode(mode) {
-            gameMode = mode;
-            if (mode === 'pvp') {
-                modePvPBtn.classList.add('active');
-                modePvCBtn.classList.remove('active');
-            } else {
-                modePvCBtn.classList.add('active');
-                modePvPBtn.classList.remove('active');
-            }
-            restartGame();
-        }
-
-        function cellClicked() {
-            const cellIndex = this.getAttribute('data-index');
-
-            // Prevent clicking if cell is full, game is over, or computer is taking its turn
-            if (options[cellIndex] != "" || !running || isComputerThinking) {
-                return;
-            }
-
-            clearHints();
-            updateCell(this, cellIndex);
-            checkWinner();
-        }
-
-        function updateCell(cell, index) {
-            options[index] = currentPlayer;
-            cell.textContent = currentPlayer;
-            // Add some color coding for X and O
-            cell.style.color = currentPlayer === "X" ? "#ff7675" : "#74b9ff";
-        }
-
-        function changePlayer() {
-            currentPlayer = (currentPlayer == "X") ? "O" : "X";
-            statusText.textContent = `Player ${currentPlayer}'s Turn`;
-        }
-
-        function checkWinner() {
-            let roundWon = false;
-
-            for (let i = 0; i < winConditions.length; i++) {
-                const condition = winConditions[i];
-                const cellA = options[condition[0]];
-                const cellB = options[condition[1]];
-                const cellC = options[condition[2]];
-
-                if (cellA == "" || cellB == "" || cellC == "") {
-                    continue;
-                }
-                if (cellA == cellB && cellB == cellC) {
-                    roundWon = true;
-                    break;
-                }
-            }
-
-            if (roundWon) {
-                statusText.textContent = `🎉 Player ${currentPlayer} Wins! 🎉`;
-                running = false;
-            } else if (!options.includes("")) {
-                statusText.textContent = `It's a Draw! 🤝`;
-                running = false;
-            } else {
-                changePlayer();
-                
-                // If it's vs Computer mode and it's O's turn, trigger the AI
-                if (running && gameMode === "pvc" && currentPlayer === "O") {
-                    isComputerThinking = true;
-                    statusText.textContent = `Computer is thinking... 🤖`;
-                    setTimeout(makeComputerMove, 600); // Small delay so it feels real
-                }
-            }
-        }
-
-        // --- COMPUTER AI LOGIC ---
-        function makeComputerMove() {
-            if (!running) return;
-
-            let bestMove = findBestMove("O"); // Try to win or block
-            
-            // If no immediate win/block, pick center or random
-            if (bestMove === -1) {
-                if (options[4] === "") {
-                    bestMove = 4; // Take center
-                } else {
-                    let emptySpots = options.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
-                    bestMove = emptySpots[Math.floor(Math.random() * emptySpots.length)];
-                }
-            }
-
-            const targetCell = document.querySelector(`.cell[data-index="${bestMove}"]`);
-            updateCell(targetCell, bestMove);
-            isComputerThinking = false;
-            checkWinner();
-        }
-
-        function restartGame() {
-            currentPlayer = "X";
-            options = ["", "", "", "", "", "", "", "", ""];
-            isComputerThinking = false;
-            statusText.textContent = `Player ${currentPlayer}'s Turn`;
-            cells.forEach(cell => {
-                cell.textContent = "";
-                cell.style.color = "white";
-            });
-            clearHints();
-            running = true;
-        }
-
-        // --- HINT LOGIC ---
-        function clearHints() {
-            cells.forEach(cell => cell.classList.remove('hint-glow'));
-        }
-
-        function giveHint() {
-            // Prevent hints if game is over or computer is thinking
-            if (!running || isComputerThinking) return;
-            clearHints();
-
-            let bestMove = findBestMove(currentPlayer);
-            
-            if (bestMove === -1) {
-                if (options[4] === "") {
-                    bestMove = 4;
-                } else {
-                    let emptySpots = options.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
-                    bestMove = emptySpots[Math.floor(Math.random() * emptySpots.length)];
-                }
-            }
-
-            if (bestMove !== -1) {
-                const targetCell = document.querySelector(`.cell[data-index="${bestMove}"]`);
-                targetCell.classList.add('hint-glow');
-                
-                setTimeout(() => {
-                    targetCell.classList.remove('hint-glow');
-                }, 2000);
-            }
-        }
-
-        // Reusable function to find a winning move or block the opponent
-        function findBestMove(player) {
-            const opponent = player === "X" ? "O" : "X";
-
-            // 1. Check if we can win
-            for (let i = 0; i < winConditions.length; i++) {
-                let [a, b, c] = winConditions[i];
-                if (options[a] == player && options[b] == player && options[c] == "") return c;
-                if (options[a] == player && options[c] == player && options[b] == "") return b;
-                if (options[b] == player && options[c] == player && options[a] == "") return a;
-            }
-
-            // 2. Check if we need to block the opponent
-            for (let i = 0; i < winConditions.length; i++) {
-                let [a, b, c] = winConditions[i];
-                if (options[a] == opponent && options[b] == opponent && options[c] == "") return c;
-                if (options[a] == opponent && options[c] == opponent && options[b] == "") return b;
-                if (options[b] == opponent && options[c] == opponent && options[a] == "") return a;
-            }
-
-            return -1; // No obvious win/block
-        }
-    </script>
+  </aside>
+ 
+  <main class="main">
+ 
+    <!-- HOME -->
+    <section class="view active" id="view-home">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Home</div>
+          <h1>Welcome back, Shubham</h1>
+        </div>
+        <div class="streak">4-day learning streak</div>
+      </div>
+ 
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Build Your Skills With Us</div>
+          <h2>Every course you finish adds to your capacity.</h2>
+          <p>Pick up where you left off, or start something new across computer skills, security, communication and leadership.</p>
+          <button class="btn btn-primary" data-view="courses">Start Learning
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="hero-dial">
+          <div class="dial-wrap">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <circle cx="90" cy="90" r="76" stroke="rgba(255,255,255,0.12)" stroke-width="12" fill="none"/>
+              <circle id="heroRing" cx="90" cy="90" r="76" stroke="#E3A857" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="477.5" stroke-dashoffset="477.5"/>
+            </svg>
+            <div class="dial-center">
+              <div class="num" id="heroPct">0%</div>
+              <div class="lbl">OVERALL CAPACITY</div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="section-head">
+        <h3>Available Courses</h3>
+        <button class="link nav-item" style="all:unset;cursor:pointer;color:var(--slate);font-weight:600;font-size:13px;" data-view="courses">View all</button>
+      </div>
+      <div class="course-grid" id="homeCourseGrid"></div>
+    </section>
+ 
+    <!-- COURSES -->
+    <section class="view" id="view-courses">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Courses</div>
+          <h1>Available Courses</h1>
+        </div>
+      </div>
+      <div class="course-grid" id="coursesCourseGrid"></div>
+    </section>
+ 
+    <!-- PROGRESS -->
+    <section class="view" id="view-progress">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">My Progress</div>
+          <h1>Your learning capacity</h1>
+        </div>
+      </div>
+ 
+      <div class="stat-row">
+        <div class="card stat-card">
+          <div class="num" id="statCompleted">0</div>
+          <div class="lbl">Courses completed</div>
+        </div>
+        <div class="card stat-card">
+          <div class="num" id="statOverall">0%</div>
+          <div class="lbl">Overall progress</div>
+        </div>
+        <div class="card stat-card">
+          <div class="num" id="statCerts">0</div>
+          <div class="lbl">Certificates earned</div>
+        </div>
+      </div>
+ 
+      <div class="section-head"><h3>Course progress</h3></div>
+      <div class="ring-grid" id="ringGrid"></div>
+    </section>
+ 
+    <!-- ASSESSMENT -->
+    <section class="view" id="view-assessment">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Assessment</div>
+          <h1>Quiz</h1>
+        </div>
+      </div>
+ 
+      <div class="quiz-shell">
+        <div id="quizArea"></div>
+        <div id="resultArea" style="display:none;"></div>
+      </div>
+    </section>
+ 
+    <!-- CERTIFICATES -->
+    <section class="view" id="view-certificates">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Certificates</div>
+          <h1>My Certificates</h1>
+        </div>
+      </div>
+      <div class="cert-grid" id="certGrid"></div>
+    </section>
+ 
+    <!-- PROFILE -->
+    <section class="view" id="view-profile">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Profile</div>
+          <h1>Your details</h1>
+        </div>
+      </div>
+ 
+      <div class="profile-grid">
+        <div class="card profile-card">
+          <div class="avatar-lg">SB</div>
+          <h3>Shubham</h3>
+          <div class="role">Learner · Joined Feb 2026</div>
+          <div class="skill-tags">
+            <span class="tag">Computer Skills</span>
+            <span class="tag">Communication</span>
+            <span class="tag">Problem Solving</span>
+          </div>
+        </div>
+ 
+        <div class="card history-card">
+          <div class="section-head" style="margin-bottom:14px;"><h3>Learning history</h3></div>
+          <div id="historyList"></div>
+        </div>
+      </div>
+    </section>
+ 
+  </main>
+</div>
+ 
+<script>
+/* ---------------- Data ---------------- */
+const courses = [
+  { id:"computer", name:"Computer Skills", desc:"Spreadsheets, documents and everyday digital tools.", progress:100, accent:"amber",
+    icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="12" rx="1.5" stroke="#101B33" stroke-width="1.6"/><path d="M8 20h8M12 16v4" stroke="#101B33" stroke-width="1.6" stroke-linecap="round"/></svg>' },
+  { id:"cyber", name:"Cyber Security", desc:"Spot threats early and keep accounts and data safe.", progress:65, accent:"slate",
+    icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3.5 5 6.5v5c0 5 3 8 7 9 4-1 7-4 7-9v-5l-7-3Z" stroke="#101B33" stroke-width="1.6" stroke-linejoin="round"/></svg>' },
+  { id:"communication", name:"Communication Skills", desc:"Write and speak clearly in the workplace.", progress:100, accent:"teal",
+    icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H9l-4 3.5V15H4V5Z" stroke="#101B33" stroke-width="1.6" stroke-linejoin="round"/></svg>' },
+  { id:"leadership", name:"Leadership", desc:"Guide teams, give feedback and make decisions.", progress:55, accent:"clay",
+    icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3.5 14 9l5.7.5-4.3 3.8 1.3 5.6L12 15.8l-4.7 3.1 1.3-5.6-4.3-3.8L9.9 9 12 3.5Z" stroke="#101B33" stroke-width="1.6" stroke-linejoin="round"/></svg>' }
+];
+ 
+const history = [
+  { title:"Completed 'Communication Skills'", date:"18 Aug 2026" },
+  { title:"Passed Assessment — Score 90%", date:"14 Aug 2026" },
+  { title:"Completed 'Computer Skills'", date:"2 Aug 2026" },
+  { title:"Started 'Leadership'", date:"22 Jul 2026" }
+];
+ 
+const quizQuestions = [
+  { q:"What's the safest response to an unexpected email asking you to reset your password?", options:["Click the link and reset it right away","Verify the sender through a separate, trusted channel first","Reply with your current password to confirm identity","Forward it to a coworker to click instead"], answer:1 },
+  { q:"In a workplace message, which approach communicates most clearly?", options:["Long, detailed background before the ask","The key point first, then supporting detail","No subject line, just get to it","Several unrelated topics in one message"], answer:1 },
+  { q:"A strong leader gives feedback that is mainly:", options:["Vague, so it feels less harsh","Specific and tied to a clear example","Delivered only in group settings","Saved up for the annual review"], answer:1 },
+  { q:"Which is the best sign of a strong password?", options:["Your pet's name","A short common word","A long mix of unrelated words and symbols","The same one reused everywhere"], answer:2 },
+  { q:"When a spreadsheet formula returns an error, the best first step is to:", options:["Delete the whole sheet","Check the cell references the formula points to","Ignore it, it will fix itself","Retype the entire spreadsheet"], answer:1 }
+];
+ 
+/* ---------------- Rendering ---------------- */
+function accentHex(a){
+  return {amber:"#E3A857", teal:"#2F6F6D", clay:"#B5654A", slate:"#4C5C8C"}[a] || "#E3A857";
+}
+ 
+function courseCardHTML(c){
+  return `
+    <div class="card course-card" data-accent="${c.accent}">
+      <div class="course-top">
+        <div class="course-icon">${c.icon}</div>
+      </div>
+      <div>
+        <h4>${c.name}</h4>
+        <div class="course-meta">${c.progress === 100 ? "Completed" : c.progress + "% complete"}</div>
+        <p class="course-desc" style="margin-top:8px;">${c.desc}</p>
+      </div>
+      <div class="course-bottom">
+        <div class="progress-track"><div class="progress-fill" style="width:${c.progress}%; background:${accentHex(c.accent)};"></div></div>
+        <span class="progress-pct">${c.progress}%</span>
+      </div>
+      <button class="btn ${c.progress===100 ? 'btn-ghost' : 'btn-primary'} btn-sm" data-goto="assessment" style="${c.progress===100?'':'background:'+accentHex(c.accent)+';color:#fff;'}">
+        ${c.progress === 100 ? "Review" : "Continue"}
+      </button>
+    </div>`;
+}
+ 
+function renderCourses(){
+  document.getElementById("homeCourseGrid").innerHTML = courses.map(courseCardHTML).join("");
+  document.getElementById("coursesCourseGrid").innerHTML = courses.map(courseCardHTML).join("");
+  attachGotoButtons();
+}
+ 
+function overallProgress(){
+  const total = courses.reduce((s,c)=>s+c.progress,0);
+  return Math.round(total / courses.length);
+}
+ 
+function renderProgressView(){
+  const overall = overallProgress();
+  const completed = courses.filter(c=>c.progress===100).length;
+  document.getElementById("statCompleted").textContent = completed;
+  document.getElementById("statOverall").textContent = overall + "%";
+  document.getElementById("statCerts").textContent = completed;
+ 
+  document.getElementById("ringGrid").innerHTML = courses.map(c=>{
+    const r = 42, circumference = 2*Math.PI*r;
+    const offset = circumference - (c.progress/100)*circumference;
+    const color = accentHex(c.accent);
+    return `
+      <div class="card ring-card">
+        <svg class="ring-svg" width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="${r}" stroke="var(--bg)" stroke-width="9" fill="none"/>
+          <circle cx="50" cy="50" r="${r}" stroke="${color}" stroke-width="9" fill="none" stroke-linecap="round"
+            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
+          <text x="50" y="54" text-anchor="middle" transform="rotate(90 50 50)" font-family="IBM Plex Sans" font-size="16" font-weight="700" fill="#101B33">${c.progress}%</text>
+        </svg>
+        <h4>${c.name}</h4>
+      </div>`;
+  }).join("");
+}
+ 
+function renderHero(){
+  const overall = overallProgress();
+  const circumference = 477.5;
+  const offset = circumference - (overall/100)*circumference;
+  const ring = document.getElementById("heroRing");
+  const pctEl = document.getElementById("heroPct");
+  requestAnimationFrame(()=>{
+    ring.style.transition = "stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)";
+    ring.style.strokeDashoffset = offset;
+  });
+  let n = 0;
+  const step = Math.max(1, Math.round(overall/40));
+  const timer = setInterval(()=>{
+    n = Math.min(overall, n+step);
+    pctEl.textContent = n + "%";
+    if(n>=overall) clearInterval(timer);
+  }, 20);
+}
+ 
+function renderCertificates(){
+  const grid = document.getElementById("certGrid");
+  grid.innerHTML = "";
+  courses.forEach(c=>{
+    if(c.progress === 100){
+      grid.insertAdjacentHTML("beforeend", `
+        <div class="card cert-card">
+          <div class="cert-face">
+            <div class="cert-eyebrow">CERTIFICATE OF COMPLETION</div>
+            <h4>${c.name}</h4>
+            <div class="cert-name">Awarded to Shubham</div>
+          </div>
+          <div class="cert-foot">
+            <span class="cert-date">Issued 2026</span>
+            <button class="btn btn-ghost btn-sm" data-cert="${c.id}" data-name="${c.name}">Download</button>
+          </div>
+        </div>`);
+    } else {
+      grid.insertAdjacentHTML("beforeend", `
+        <div class="card cert-card">
+          <div class="cert-locked">
+            <strong style="color:var(--ink);">${c.name}</strong>
+            <span>Reach 100% to unlock this certificate. Currently at ${c.progress}%.</span>
+          </div>
+        </div>`);
+    }
+  });
+  document.querySelectorAll("[data-cert]").forEach(btn=>{
+    btn.addEventListener("click", ()=> downloadCertificate(btn.dataset.name));
+  });
+}
+ 
+function renderHistory(){
+  document.getElementById("historyList").innerHTML = history.map(h=>`
+    <div class="history-item">
+      <div class="history-dot"></div>
+      <div>
+        <div class="h-title">${h.title}</div>
+        <div class="h-date">${h.date}</div>
+      </div>
+    </div>`).join("");
+}
+ 
+/* ---------------- Certificate download (canvas) ---------------- */
+function downloadCertificate(courseName){
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200; canvas.height = 800;
+  const ctx = canvas.getContext("2d");
+ 
+  ctx.fillStyle = "#F2F5F8";
+  ctx.fillRect(0,0,1200,800);
+  ctx.strokeStyle = "#E3A857";
+  ctx.lineWidth = 6;
+  ctx.strokeRect(40,40,1120,720);
+  ctx.strokeStyle = "#101B33";
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(56,56,1088,688);
+ 
+  ctx.fillStyle = "#8992A3";
+  ctx.font = "600 16px IBM Plex Sans, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("CAPACITY CONNECT · CERTIFICATE OF COMPLETION", 600, 170);
+ 
+  ctx.fillStyle = "#101B33";
+  ctx.font = "600 46px Fraunces, serif";
+  ctx.fillText("This certifies that", 600, 260);
+ 
+  ctx.font = "700 58px Fraunces, serif";
+  ctx.fillText("Shubham", 600, 340);
+ 
+  ctx.font = "400 24px IBM Plex Sans, sans-serif";
+  ctx.fillStyle = "#5B6478";
+  ctx.fillText("has successfully completed the course", 600, 400);
+ 
+  ctx.font = "600 34px Fraunces, serif";
+  ctx.fillStyle = "#101B33";
+  ctx.fillText(courseName, 600, 460);
+ 
+  ctx.font = "400 16px IBM Plex Sans, sans-serif";
+  ctx.fillStyle = "#8992A3";
+  const d = new Date();
+  ctx.fillText("Issued " + d.toLocaleDateString("en-US", {day:"numeric", month:"long", year:"numeric"}), 600, 640);
+ 
+  ctx.beginPath();
+  ctx.arc(1000, 620, 42, 0, Math.PI*2);
+  ctx.fillStyle = "#E3A857";
+  ctx.fill();
+  ctx.fillStyle = "#101B33";
+  ctx.font = "700 14px IBM Plex Sans, sans-serif";
+  ctx.fillText("CC", 1000, 626);
+ 
+  const link = document.createElement("a");
+  link.download = courseName.replace(/\s+/g,"_") + "_Certificate.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+ 
+/* ---------------- Quiz ---------------- */
+let quizIndex = 0;
+let quizSelections = [];
+ 
+function startQuiz(){
+  quizIndex = 0;
+  quizSelections = new Array(quizQuestions.length).fill(null);
+  document.getElementById("resultArea").style.display = "none";
+  document.getElementById("quizArea").style.display = "block";
+  renderQuestion();
+}
+ 
+function renderQuestion(){
+  const q = quizQuestions[quizIndex];
+  const area = document.getElementById("quizArea");
+  area.innerHTML = `
+    <div class="quiz-progress">Question ${quizIndex+1} of ${quizQuestions.length}</div>
+    <div class="card quiz-card">
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((opt,i)=>`<button class="quiz-option ${quizSelections[quizIndex]===i?'selected':''}" data-i="${i}">${opt}</button>`).join("")}
+      </div>
+      <div class="quiz-nav">
+        <button class="btn btn-primary btn-sm" id="quizNextBtn" ${quizSelections[quizIndex]===null?'disabled style="opacity:.5;cursor:not-allowed;"':''}>
+          ${quizIndex === quizQuestions.length-1 ? "See Result" : "Next"}
+        </button>
+      </div>
+    </div>`;
+ 
+  area.querySelectorAll(".quiz-option").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      quizSelections[quizIndex] = parseInt(btn.dataset.i);
+      renderQuestion();
+    });
+  });
+ 
+  document.getElementById("quizNextBtn").addEventListener("click", ()=>{
+    if(quizSelections[quizIndex]===null) return;
+    if(quizIndex === quizQuestions.length-1){
+      showResult();
+    } else {
+      quizIndex++;
+      renderQuestion();
+    }
+  });
+}
+ 
+function showResult(){
+  let correct = 0;
+  quizQuestions.forEach((q,i)=>{ if(quizSelections[i]===q.answer) correct++; });
+  const pct = Math.round((correct/quizQuestions.length)*100);
+  const passed = pct >= 60;
+ 
+  document.getElementById("quizArea").style.display = "none";
+  const resultArea = document.getElementById("resultArea");
+  resultArea.style.display = "block";
+  resultArea.innerHTML = `
+    <div class="card result-card">
+      <div class="course-meta" style="color:var(--ink-faint);">SCORE</div>
+      <div class="big" style="color:${passed?'var(--success)':'var(--clay)'};">${pct}%</div>
+      <div class="verdict">${correct} of ${quizQuestions.length} correct — ${passed ? "Result: Passed" : "Result: Not passed, try again"}</div>
+      <button class="btn btn-primary btn-sm" id="retakeBtn">Retake Quiz</button>
+    </div>`;
+  document.getElementById("retakeBtn").addEventListener("click", startQuiz);
+}
+ 
+/* ---------------- Navigation ---------------- */
+function setView(view){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.getElementById("view-"+view).classList.add("active");
+  document.querySelectorAll(".nav-item[data-view]").forEach(n=>{
+    n.classList.toggle("active", n.dataset.view===view);
+  });
+  if(view === "assessment") startQuiz();
+  if(view === "progress") renderProgressView();
+  if(view === "certificates") renderCertificates();
+  window.scrollTo({top:0, behavior:"instant"});
+}
+ 
+function attachGotoButtons(){
+  document.querySelectorAll("[data-goto]").forEach(btn=>{
+    btn.addEventListener("click", ()=> setView(btn.dataset.goto));
+  });
+}
+ 
+document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
+  btn.addEventListener("click", ()=> setView(btn.dataset.view));
+});
+document.querySelectorAll("[data-view].btn").forEach(btn=>{
+  btn.addEventListener("click", ()=> setView(btn.dataset.view));
+});
+ 
+/* ---------------- Init ---------------- */
+renderCourses();
+renderHistory();
+renderHero();
+</script>
 </body>
 </html>
+ 
